@@ -1,4 +1,4 @@
-package com.ekosp.mvvmretrofit.helper;
+package com.ekosp.mvvmretrofit.repository.model;
 
 /**
  * Created by eko on 15/05/18.

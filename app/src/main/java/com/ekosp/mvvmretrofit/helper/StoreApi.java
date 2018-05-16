@@ -1,5 +1,8 @@
 package com.ekosp.mvvmretrofit.helper;
 
+import com.ekosp.mvvmretrofit.repository.model.Coupon;
+import com.ekosp.mvvmretrofit.repository.model.StoreInfo;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 

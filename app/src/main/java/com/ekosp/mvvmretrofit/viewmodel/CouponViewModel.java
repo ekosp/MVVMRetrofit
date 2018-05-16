@@ -3,8 +3,8 @@ package com.ekosp.mvvmretrofit.viewmodel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.ekosp.mvvmretrofit.helper.Coupon;
-import com.ekosp.mvvmretrofit.model.RetrofitRepository;
+import com.ekosp.mvvmretrofit.repository.model.Coupon;
+import com.ekosp.mvvmretrofit.repository.RetrofitRepository;
 
 /**
  * Created by eko on 15/05/18.

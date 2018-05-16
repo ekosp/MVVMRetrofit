@@ -1,12 +1,12 @@
-package com.ekosp.mvvmretrofit.model;
+package com.ekosp.mvvmretrofit.repository;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
-import com.ekosp.mvvmretrofit.helper.Coupon;
+import com.ekosp.mvvmretrofit.repository.model.Coupon;
 import com.ekosp.mvvmretrofit.helper.StoreApi;
-import com.ekosp.mvvmretrofit.helper.StoreInfo;
+import com.ekosp.mvvmretrofit.repository.model.StoreInfo;
 
 import java.util.concurrent.Executors;
 

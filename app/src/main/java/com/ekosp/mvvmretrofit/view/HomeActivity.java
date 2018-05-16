@@ -1,27 +1,34 @@
 package com.ekosp.mvvmretrofit.view;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
-import android.net.Network;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ekosp.mvvmretrofit.R;
-import com.ekosp.mvvmretrofit.model.DataRepository;
-import com.ekosp.mvvmretrofit.model.RetrofitRepository;
+import com.ekosp.mvvmretrofit.repository.DataRepository;
+import com.ekosp.mvvmretrofit.repository.RetrofitRepository;
+import com.ekosp.mvvmretrofit.repository.db.Counter;
+import com.ekosp.mvvmretrofit.viewmodel.CounterViewModel;
 import com.ekosp.mvvmretrofit.viewmodel.CouponViewModel;
+
+import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity {
 
     private CouponViewModel couponViewModel;
-    private TextView tv;
+    private CounterViewModel counterViewModel;
+    TextView tvCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tvCounter = (TextView) findViewById(R.id.counter);
+
 
         //add observer to LiveData
         //observer gets called every time data changes in LiveData
@@ -33,12 +40,19 @@ public class HomeActivity extends AppCompatActivity {
             ((TextView)findViewById(R.id.store_t)).setText(""+storeInfo.getStore());
         });
 
-        tv = (TextView) findViewById(R.id.coupon);
-        //get ViewModel using ViewModelProviders and then tech data
+     //   tv = (TextView) findViewById(R.id.coupon);
         couponViewModel = ViewModelProviders.of(this).get(CouponViewModel.class);
-        //livedata
         couponViewModel.getLiveCoupon().observe(this, coupon -> {
-            tv.setText(""+coupon.getCoupon()+" "+coupon.getCouponCode());
+            ((TextView)findViewById(R.id.coupon)).setText(""+coupon.getCoupon()+" "+coupon.getCouponCode());
+        });
+
+
+        // Get a new or existing ViewModel from the ViewModelProvider.
+        counterViewModel = ViewModelProviders.of(this).get(CounterViewModel.class);
+        counterViewModel.getCounter().observe(this, counter -> {
+            // Update the cached copy of the words in the adapter.
+            ((TextView)findViewById(R.id.counter)).setText("last inserted : "+counter.getValue());
+          //  Toast.makeText(this, "add new counter"+counter.getValue(), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -52,11 +66,15 @@ public class HomeActivity extends AppCompatActivity {
         RetrofitRepository.getStoreInfo();
     }
 
-    public void getTopCoupon(View view){
-//       String coupon =  couponViewModel.getLiveCoupon().getValue().getStore()+" "+
-//               couponViewModel.getLiveCoupon().getValue().getCoupon()
-//              +" "+ couponViewModel.getLiveCoupon().getValue().getCouponCode();
-//       tv.setText(coupon);
+    public void addCounter (View view){
+        Random r = new Random();
+        int random = r.nextInt(555 - 1) + 1;
+        counterViewModel.insert(new Counter(random));
+        Toast.makeText(this, "insert: "+random, Toast.LENGTH_SHORT).show();
+    }
+
+    public void getTopCoupon(View v){
+
     }
 
 }

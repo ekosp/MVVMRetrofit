@@ -20,61 +20,57 @@ public class HomeActivity extends AppCompatActivity {
 
     private CouponViewModel couponViewModel;
     private CounterViewModel counterViewModel;
-    TextView tvCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tvCounter = (TextView) findViewById(R.id.counter);
-
-
-        //add observer to LiveData
-        //observer gets called every time data changes in LiveData
+        // menu #1 : just LiveDate
         DataRepository.getData().observe(this, time -> {
-            ((TextView)findViewById(R.id.time_t)).setText(""+time);
+            ((TextView) findViewById(R.id.time_t)).setText("" + time);
         });
 
+        // menu #2 : Retrofit + LiveData
         RetrofitRepository.getIntData().observe(this, storeInfo -> {
-            ((TextView)findViewById(R.id.store_t)).setText(""+storeInfo.getStore());
+            ((TextView) findViewById(R.id.store_t)).setText("" + storeInfo.getStore());
         });
 
-     //   tv = (TextView) findViewById(R.id.coupon);
+        // menu #3 : Retrofit LiveData ModelView
         couponViewModel = ViewModelProviders.of(this).get(CouponViewModel.class);
         couponViewModel.getLiveCoupon().observe(this, coupon -> {
-            ((TextView)findViewById(R.id.coupon)).setText(""+coupon.getCoupon()+" "+coupon.getCouponCode());
+            ((TextView) findViewById(R.id.coupon)).setText("" + coupon.getCoupon() + " " + coupon.getCouponCode());
         });
 
-
-        // Get a new or existing ViewModel from the ViewModelProvider.
+        // menu #4 : Room LiveData ModelView
         counterViewModel = ViewModelProviders.of(this).get(CounterViewModel.class);
         counterViewModel.getCounter().observe(this, counter -> {
-            // Update the cached copy of the words in the adapter.
-            ((TextView)findViewById(R.id.counter)).setText("last inserted : "+counter.getValue());
-          //  Toast.makeText(this, "add new counter"+counter.getValue(), Toast.LENGTH_SHORT).show();
+            try {
+                ((TextView) findViewById(R.id.counter)).setText("last inserted : " + counter.getValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+                ((TextView) findViewById(R.id.counter)).setText("last inserted : ---- ");
+            }
         });
     }
 
-    //on click of button, set latest time to LiveData
-    public void getTime(View view){
-       DataRepository.getData();
+    public void getTime(View view) {
+        DataRepository.getData();
     }
 
-    // sample call retrofit repo, set response to LiveData
-    public void getStore(View view){
+    public void getStore(View view) {
         RetrofitRepository.getStoreInfo();
     }
 
-    public void addCounter (View view){
+    public void addCounter(View view) {
         Random r = new Random();
         int random = r.nextInt(555 - 1) + 1;
         counterViewModel.insert(new Counter(random));
-        Toast.makeText(this, "insert: "+random, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "insert: " + random, Toast.LENGTH_SHORT).show();
     }
 
-    public void getTopCoupon(View v){
-
+    public void getTopCoupon(View v) {
+        // no need click because livedata, it automate to get data from repository
     }
 
 }
